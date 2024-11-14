@@ -1,0 +1,14 @@
+{
+  "Vendor1": {
+    "name": "name",
+    "price": "price",
+    "description": "description",
+    "image_url": "image"
+  },
+  "Vendor2": {
+    "name": "productName",
+    "price": "price.amount",
+    "description": "productInfo.description",
+    "image_url": "productInfo.image"
+  }
+}
