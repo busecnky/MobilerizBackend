@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
+
 from config.sqlite_config import Base
 
 
@@ -11,3 +13,5 @@ class Product(Base):
     price = Column(Float, nullable=False)
     image_url = Column(String, nullable=True)
     vendor_id = Column(Integer, ForeignKey('vendors.id'), nullable=False)
+
+    vendor = relationship("Vendor")

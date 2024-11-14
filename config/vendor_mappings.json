@@ -1,12 +1,12 @@
 {
-  "Vendor1": {
-    "name": "name",
+  "Vendor8": {
+    "product_name": "name",
     "price": "price",
     "description": "description",
-    "image_url": "image"
+    "image_url": "image_url"
   },
   "Vendor2": {
-    "name": "productName",
+    "product_name": "productName",
     "price": "price.amount",
     "description": "productInfo.description",
     "image_url": "productInfo.image"

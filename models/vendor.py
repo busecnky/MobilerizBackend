@@ -1,5 +1,4 @@
 from sqlalchemy import Column, Integer, String
-
 from config.sqlite_config import Base
 
 

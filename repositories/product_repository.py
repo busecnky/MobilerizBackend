@@ -2,13 +2,13 @@ from sqlalchemy.orm import Session
 from models.product import Product
 
 
-def create_product(db: Session, data: dict, vendor_id: int):
+def create_product(db: Session, product_data: dict, vendor_id: int):
     product = Product(
-        name=data['name'],
-        price=data['price'],
-        description=data['description'],
-        image_url=data['image_url'],
-        vendor_id=vendor_id,
+        product_name=product_data["name"],
+        description=product_data["description"],
+        price=product_data["price"],
+        image_url=product_data["image_url"],
+        vendor_id=vendor_id
     )
     db.add(product)
     db.commit()

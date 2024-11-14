@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session
 from models.vendor import Vendor
 
 
-def create_vendor(db: Session, VendorData):
-    vendor = Vendor(**VendorData)
+def create_vendor(db: Session, vendor_data: dict):
+    vendor = Vendor(**vendor_data)
     db.add(vendor)
     db.commit()
     db.refresh(vendor)
