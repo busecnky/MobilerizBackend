@@ -1,10 +1,12 @@
+from typing import Dict, Any
+
 from sqlalchemy.orm import Session
 from models.product import Product
 
 
-def create_product(db: Session, product_data: dict, vendor_id: int):
+def create_product(db: Session, product_data:  Dict[str, Any], vendor_id: int):
     product = Product(
-        product_name=product_data["name"],
+        product_name=product_data["product_name"],
         description=product_data["description"],
         price=product_data["price"],
         image_url=product_data["image_url"],
