@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from config.sqlite_config import Base, engine
-from controller import vendor_controller
+from controller import controller
 
 app = FastAPI(debug=True)
 

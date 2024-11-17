@@ -1,7 +1,7 @@
 from config.kafka_config import get_kafka_producer, TOPIC_NAME
 
 
-def send_message_to_kafka(message: str):
+def send_message_to_kafka(message: dict):
     producer = get_kafka_producer()
     try:
         producer.send(TOPIC_NAME, value=message)
