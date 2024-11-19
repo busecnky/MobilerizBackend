@@ -1,23 +1,40 @@
 import httpx
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
+from config.sqlite_config import get_db
+from models.vendor import Vendor
+from services.kafka_producer import send_message_to_kafka
 
-from repositories.product_repository import create_product
-from repositories.vendor_repository import create_vendor
-from services.converter_service import ConverterService
+
+async def find_all_vendors():
+    db = next(get_db())
+    return db.query(Vendor).all()
 
 
-async def create_vendor_and_fetch_products(db: Session, vendor_data: dict):
-    vendor = create_vendor(db, vendor_data)
+async def fetch_product_from_vendor_by_name(product_name: str):
+    vendors = await find_all_vendors()
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(vendor.base_url)
-        if response.status_code == 200:
-            products_data = ConverterService.convert_to_product(vendor_data, vendor.vendor_name)
-            products = []
-            for product in products_data:
-                create_product(db, product, vendor_id=vendor.id)
-                products.append(product)
+    if vendors is None:
+        raise HTTPException(status_code=404, detail="There is not any vendor to search")
 
-            return vendor, products
-        else:
-            print(f"Failed to fetch data from {vendor.vendor_name}: {response.status_code}")
+    for vendor in vendors:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(vendor.base_url)
+            if response.status_code == 200:
+                products = response.json()
+
+                for product in products:
+                    if product["name"].lower() == product_name.lower():
+                        kafka_message = {
+                            "product_id": product["id"],
+                            "name": product["name"],
+                            "price": product["price"],
+                            "description": product["description"],
+                            "image_url": product["image_url"],
+                            "vendor_id": vendor.id
+                        }
+                        send_message_to_kafka({"product": kafka_message})
+
+                        return product
+
+    return None

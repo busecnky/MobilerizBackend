@@ -1,4 +1,4 @@
-version: '5.1'
+version: '5.3'
 
 services:
   postgres:
@@ -7,8 +7,13 @@ services:
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 4628
+      POSTGRES_DB: mobilerizDB
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
