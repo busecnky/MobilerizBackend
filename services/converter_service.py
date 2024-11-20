@@ -18,11 +18,11 @@ class ConverterService:
             "description": "productDescription",
             "image_url": "productImageUrl"
         },
-        "Vendor3": {
+        "Fakestore": {
             "product_name": "title",
-            "price": "cost",
-            "description": "details",
-            "image_url": "image_link"
+            "price": "price",
+            "description": "description",
+            "image_url": "image"
         }
     }
 

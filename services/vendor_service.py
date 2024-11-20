@@ -1,6 +1,5 @@
 import httpx
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
 from config.sqlite_config import get_db
 from models.vendor import Vendor
 from services.converter_service import convert_data_for_vendor

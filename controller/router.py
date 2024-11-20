@@ -1,4 +1,3 @@
-import asyncio
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from config.sqlite_config import get_db
@@ -30,21 +29,9 @@ async def get_product_from_sqlite_or_vendor(product_name: str, db: Session = Dep
 
         consume_messages_from_kafka(db, product_name)
 
-        await asyncio.sleep(1)
         products = db.query(Product).filter(Product.product_name == product_name).all()
 
         if not products:
             raise HTTPException(status_code=404, detail="Product not found in vendors")
 
-    product_list = [
-        {
-            "product_name": product.product_name,
-            "price": product.price,
-            "description": product.description,
-            "image_url": product.image_url,
-            "vendor_id": product.vendor_id,
-        }
-        for product in products
-    ]
-
-    return {"status": "success", "products": product_list}
+    return {"status": "success", "products": products}
