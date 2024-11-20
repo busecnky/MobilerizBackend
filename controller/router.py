@@ -27,6 +27,7 @@ async def get_product_from_sqlite_or_vendor(product_name: str, db: Session = Dep
     if not products:
         await fetch_product_from_vendor_by_name(product_name)
 
+
         consume_messages_from_kafka(db, product_name)
 
         await asyncio.sleep(1)

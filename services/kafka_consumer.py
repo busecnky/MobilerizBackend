@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from config.kafka_config import get_kafka_consumer
 from config.sqlite_config import get_db
 from models.product import Product
+from services.converter_service import convert_data_for_vendor
+
 
 def consume_messages_from_kafka(db: Session, product_name: str):
     consumer = get_kafka_consumer()
@@ -13,15 +15,13 @@ def consume_messages_from_kafka(db: Session, product_name: str):
         for message in consumer:
 
             payload = message.value
-            product_data = payload['product']
-            print(product_data , "-----------------------")
+            payload_data = payload['product']
 
             try:
-                product_name_from_kafka = product_data["name"]
-                print(product_name_from_kafka ,"******************" , product_name)
+                product_name_from_kafka = payload_data["product_name"]
                 if product_name_from_kafka == product_name:
 
-                    save_data_to_sqlite(db, product_data)
+                    save_data_to_sqlite(db, payload_data)
 
                 break
             except Exception as e:
@@ -37,7 +37,7 @@ def save_data_to_sqlite(db: Session, payload: dict):
 
     try:
         new_product = Product(
-            product_name=payload["name"],
+            product_name=payload["product_name"],
             price=payload["price"],
             description=payload["description"],
             image_url=payload["image_url"],

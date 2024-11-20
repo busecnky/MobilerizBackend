@@ -1,24 +1,22 @@
 from typing import Dict, Any
 
-from pydantic import json
-
 
 def get_value(data: Dict[str, Any], key: str):
     return data.get(key, None)
 
 class ConverterService:
     vendor_mappings = {
-        "Vendor21": {
+        "Vendor1": {
             "product_name": "name",
             "price": "price",
             "description": "description",
             "image_url": "image_url"
         },
-        "Vendor2": {
+        "Vendor 2": {
             "product_name": "productName",
-            "price": "price.amount",
-            "description": "productInfo.description",
-            "image_url": "productInfo.image"
+            "price": "priceAmount",
+            "description": "productDescription",
+            "image_url": "productImageUrl"
         },
         "Vendor3": {
             "product_name": "title",
@@ -45,3 +43,21 @@ class ConverterService:
             }
             products.append(product_data)
         return products
+
+
+def convert_data_for_vendor(payload: dict, vendor_name: str) -> dict:
+    mapping = ConverterService.vendor_mappings.get(vendor_name)
+
+    if not mapping:
+        print(f"Mapping for vendor {vendor_name} not found!")
+        return None
+
+    product_data = {}
+    for field, kafka_field in mapping.items():
+        if kafka_field in payload:
+            product_data[field] = payload[kafka_field]
+        else:
+            print(f"Missing field {kafka_field} in payload")
+            product_data[field] = None
+
+    return product_data
