@@ -1,10 +1,12 @@
 from asyncio import Event
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
 
-from config.sqlite_config import Base, engine
+from config.sqlite_config import Base, engine, get_db
 from controller import router
+from models.product import Product
 
 app = FastAPI(debug=True)
 
@@ -22,9 +24,15 @@ app.add_middleware(
 )
 
 Base.metadata.create_all(bind=engine)
+
 app.include_router(router.router)
 shutdown_event = Event()
 
 @app.get("/")
 async def root():
     return {"message": "Unified Vendor Data API"}
+
+@app.get("/sqlite/products/")
+def read_products_sqlite(db: Session = Depends(get_db)):
+    products = db.query(Product).all()
+    return products

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="mobilerizdb.sqlite" uuid="a45b7547-d63f-46f1-a8d3-7ed063bcc3eb">
+    <data-source source="LOCAL" name="mobileriz.db" uuid="2e4fb110-abec-44d2-9458-f7f2ac2dd0e0">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:mobilerizdb.sqlite</jdbc-url>
+      <jdbc-url>jdbc:sqlite:mobileriz.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

@@ -1,20 +1,6 @@
-version: '5.3'
+version: '8.1'
 
 services:
-  postgres:
-    container_name: postgres_container
-    image: postgres
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 4628
-      POSTGRES_DB: mobilerizDB
-    command:
-      - "postgres"
-      - "-c"
-      - "wal_level=logical"
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.4
     environment:
@@ -53,44 +39,3 @@ services:
                 bootstrap.servers: "kafka:9092"
     depends_on:
       - kafka
-
-  flink-jobmanager:
-    image: flink:latest
-    container_name: flink-jobmanager
-    ports:
-      - "8081:8081"
-    environment:
-      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
-    command: jobmanager
-    depends_on:
-      - kafka
-    volumes:
-      - //c/Flink/lib:/opt/flink/lib
-
-  flink-taskmanager:
-    image: flink:latest
-    container_name: flink-taskmanager
-    depends_on:
-      - flink-jobmanager
-    environment:
-      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
-    command: taskmanager
-    volumes:
-      - //c/Flink/lib:/opt/flink/lib
-
-  kafka-connect:
-    image: debezium/connect:3.0.0.Final
-    ports:
-      - "8083:8083"
-    environment:
-      - BOOTSTRAP_SERVERS=kafka:9092
-      - GROUP_ID=connect-cluster
-      - CONFIG_STORAGE_TOPIC=connect-configs
-      - OFFSET_STORAGE_TOPIC=connect-offsets
-      - STATUS_STORAGE_TOPIC=connect-status
-    volumes:
-      - ./debezium-connector:/kafka/connect/debezium
-    depends_on:
-      - kafka
-      - zookeeper
-      - postgres

@@ -1,11 +1,7 @@
-import asyncio
-
 from sqlalchemy.orm import Session
 
 from config.kafka_config import get_kafka_consumer
-from config.sqlite_config import get_db
 from models.product import Product
-from services.converter_service import convert_data_for_vendor
 
 
 def consume_messages_from_kafka(db: Session, product_name: str):
